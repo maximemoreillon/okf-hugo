@@ -1,0 +1,14 @@
+{{ define "main" }}
+<article class="concept">
+  <header class="concept-head">
+    <h1>{{ .LinkTitle }}</h1>
+    {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
+  </header>
+
+  {{ partial "okf-meta.html" . }}
+
+  {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+
+  {{ partial "backlinks.html" . }}
+</article>
+{{ end }}

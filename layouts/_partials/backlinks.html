@@ -1,0 +1,41 @@
+{{- /*
+  Backlinks for an OKF concept: every page whose body contains a markdown
+  link resolving to this page. The source->target index is built once and
+  cached on site.Store.
+*/ -}}
+{{- $index := site.Store.Get "okf_backlinks" -}}
+{{- if not $index -}}
+  {{- $index = dict -}}
+  {{- $re := `\]\(\s*(<?[^)>\s]+?\.md)>?(?:#[^)\s]*)?\s*\)` -}}
+  {{- $all := site.RegularPages -}}
+  {{- range site.Sections }}{{ $all = $all | append . }}{{ end -}}
+  {{- range $src := $all -}}
+    {{- range $m := findRESubmatch $re $src.RawContent -}}
+      {{- $raw := index $m 1 -}}
+      {{- $path := strings.TrimPrefix "<" $raw -}}
+      {{- if hasSuffix $path "/index.md" -}}
+        {{- $path = strings.TrimSuffix "/index.md" $path -}}
+      {{- else if or (eq $path "index.md") (eq $path "/index.md") -}}
+        {{- $path = "/" -}}
+      {{- end -}}
+      {{- with $src.GetPage $path -}}
+        {{- $key := .RelPermalink -}}
+        {{- $cur := or (index $index $key) slice -}}
+        {{- if not (in $cur $src) -}}
+          {{- $index = merge $index (dict $key ($cur | append $src)) -}}
+        {{- end -}}
+      {{- end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- site.Store.Set "okf_backlinks" $index -}}
+{{- end -}}
+{{- with index $index .RelPermalink }}
+<section class="backlinks">
+  <h2>Referenced by</h2>
+  <ul>
+    {{- range (sort . "Title") }}
+    <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>{{ with .Params.type }} <span class="nav-type">{{ . }}</span>{{ end }}</li>
+    {{- end }}
+  </ul>
+</section>
+{{- end -}}

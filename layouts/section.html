@@ -1,0 +1,46 @@
+{{ define "main" }}
+<article class="concept">
+  <header class="concept-head">
+    <h1>{{ .LinkTitle }}</h1>
+    {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
+  </header>
+
+  {{ partial "okf-meta.html" . }}
+
+  {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+
+  {{ $pages := .RegularPages }}
+  {{ $sections := .Sections }}
+  {{ if or $pages $sections }}
+  <section class="listing">
+    <h2>Contents</h2>
+    {{ with $sections }}
+    <ul class="concept-list">
+      {{ range . }}
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .LinkTitle }}/</a>
+        {{ with .Description }}<span class="muted">{{ . }}</span>{{ end }}
+      </li>
+      {{ end }}
+    </ul>
+    {{ end }}
+    {{ with $pages }}
+    {{ range .GroupByParam "type" }}
+    <h3 class="group-head">{{ .Key | default "Concepts" }}</h3>
+    <ul class="concept-list">
+      {{ range .Pages }}
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+        {{ with .Params.status }}<span class="badge badge-status badge-{{ . | urlize }}">{{ . }}</span>{{ end }}
+        {{ with .Description }}<span class="muted">{{ . }}</span>{{ end }}
+      </li>
+      {{ end }}
+    </ul>
+    {{ end }}
+    {{ end }}
+  </section>
+  {{ end }}
+
+  {{ partial "backlinks.html" . }}
+</article>
+{{ end }}

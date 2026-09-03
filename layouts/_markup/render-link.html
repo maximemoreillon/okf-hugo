@@ -1,0 +1,32 @@
+{{- /*
+  OKF cross-links are plain markdown links to `.md` files, bundle-absolute
+  (`/tables/customers.md`) or relative. Resolve them to rendered URLs;
+  leave everything else (http, mailto, #anchors, assets) untouched.
+*/ -}}
+{{- $dest := .Destination -}}
+{{- $u := urls.Parse $dest -}}
+{{- $external := or $u.IsAbs (hasPrefix $dest "//") (hasPrefix $dest "mailto:") -}}
+{{- if and (not $external) (hasSuffix $u.Path ".md") -}}
+  {{- $path := $u.Path -}}
+  {{- if hasSuffix $path "/index.md" -}}
+    {{- $path = strings.TrimSuffix "/index.md" $path -}}
+  {{- else if or (eq $path "index.md") (eq $path "/index.md") -}}
+    {{- $path = "/" -}}
+  {{- end -}}
+  {{- $target := .Page.GetPage $path -}}
+  {{- if $target -}}
+    {{- $dest = $target.RelPermalink -}}
+    {{- with $u.Fragment }}{{ $dest = printf "%s#%s" $dest . }}{{ end -}}
+  {{- else -}}
+    {{- warnf "OKF: unresolved link %q in %s" .Destination .Page.Path -}}
+    {{- $dest = printf "%s#okf-missing" (.Destination | relURL) -}}
+  {{- end -}}
+{{- end -}}
+{{- $missing := hasSuffix $dest "#okf-missing" -}}
+<a href="{{ $dest }}"
+  {{- with .Title }} title="{{ . }}"{{ end }}
+  {{- if $external }} rel="noopener"{{ end }}
+  {{- if $missing }} class="link-missing" data-okf-missing aria-disabled="true"{{ end }}>
+  {{- .Text | safeHTML -}}
+</a>
+{{- if $missing }}<sup class="link-missing-mark" title="Unresolved OKF link">?</sup>{{ end -}}

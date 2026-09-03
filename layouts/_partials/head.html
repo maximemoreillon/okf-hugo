@@ -1,0 +1,17 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+{{- $title := .Title | default site.Title -}}
+{{- if .IsHome }}<title>{{ site.Title }}</title>
+{{- else }}<title>{{ $title }} &middot; {{ site.Title }}</title>{{ end }}
+{{- with .Description }}
+<meta name="description" content="{{ . }}">{{ end }}
+<meta name="generator" content="Hugo {{ hugo.Version }} / OKF renderer">
+{{ with resources.Get "css/main.css" }}
+  {{ if hugo.IsProduction }}
+    {{ with . | minify | fingerprint }}
+      <link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}">
+    {{ end }}
+  {{ else }}
+    <link rel="stylesheet" href="{{ .RelPermalink }}">
+  {{ end }}
+{{ end }}

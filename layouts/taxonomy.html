@@ -1,0 +1,10 @@
+{{ define "main" }}
+<article class="concept">
+  <header class="concept-head"><h1>Tags</h1></header>
+  <ul class="concept-list">
+    {{ range .Pages }}
+    <li><a href="{{ .RelPermalink }}">{{ .Title }}</a> <span class="muted">{{ len .Pages }}</span></li>
+    {{ end }}
+  </ul>
+</article>
+{{ end }}

@@ -1,1 +1,7 @@
-content/bundle
+# Build artifacts — the site is assembled at runtime from an OKF bundle.
+/content/
+/public/
+/resources/
+.hugo_build.lock
+
+.claude

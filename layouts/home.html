@@ -1,0 +1,39 @@
+{{ define "main" }}
+<article class="concept home">
+  <header class="concept-head">
+    <h1>{{ .Title | default site.Title }}</h1>
+    {{ with .Description }}<p class="lead">{{ . }}</p>{{ end }}
+  </header>
+
+  {{ if .File }}{{ partial "okf-meta.html" . }}{{ end }}
+
+  {{ with .Content }}<div class="prose">{{ . }}</div>{{ end }}
+
+  {{ $all := site.RegularPages }}
+  <section class="bundle-summary">
+    <h2>Bundle</h2>
+    <p class="muted">{{ len $all }} concept{{ if ne (len $all) 1 }}s{{ end }}
+      across {{ len site.Sections }} section{{ if ne (len site.Sections) 1 }}s{{ end }}.</p>
+    <ul class="type-tally">
+      {{ range $all.GroupByParam "type" }}
+      <li><span class="badge badge-type">{{ .Key | default "untyped" }}</span> {{ len .Pages }}</li>
+      {{ end }}
+    </ul>
+  </section>
+
+  <section class="listing">
+    <h2>Sections</h2>
+    <ul class="concept-list">
+      {{ range site.Sections }}
+      <li>
+        <a href="{{ .RelPermalink }}">{{ .LinkTitle }}/</a>
+        {{ with .Description }}<span class="muted">{{ . }}</span>{{ end }}
+      </li>
+      {{ end }}
+      {{ range where site.Home.RegularPages "Params.type" "!=" nil }}
+      <li><a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a></li>
+      {{ end }}
+    </ul>
+  </section>
+</article>
+{{ end }}

@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: okf-hugo
+spec:
+  selector:
+    matchLabels:
+      app: okf-hugo
+  template:
+    metadata:
+      labels:
+        app: okf-hugo
+    spec:
+      initContainers:
+        - name: clone-bundle
+          image: alpine/git:2.45.2
+          args:
+            - clone
+            - --depth=1
+            - https://github.com/your-org/your-okf-bundle.git
+            - /bundle
+          volumeMounts:
+            - name: bundle
+              mountPath: /bundle
+      containers:
+        - name: renderer
+          image: your-registry/okf-hugo:latest
+          env:
+            - name: HUGO_BASEURL
+              value: https://knowledge.example.org/
+            - name: OKF_TITLE
+              value: "Acme Knowledge"
+          volumeMounts:
+            - name: bundle
+              mountPath: /bundle
+              readOnly: true
+      volumes:
+        - name: bundle
+          emptyDir:
+            medium: ""

@@ -1,0 +1,59 @@
+{{- /* Renders OKF frontmatter for a concept page as a metadata panel. */ -}}
+{{- $p := .Params -}}
+<dl class="okf-meta">
+  {{- with $p.type }}
+  <div><dt>Type</dt><dd><span class="badge badge-type">{{ . }}</span></dd></div>
+  {{- end }}
+  {{- with $p.status }}
+  <div><dt>Status</dt><dd><span class="badge badge-status badge-{{ . | urlize }}">{{ . }}</span></dd></div>
+  {{- end }}
+  {{- with $p.resource }}
+  <div><dt>Resource</dt><dd>
+    {{- if or (hasPrefix . "http://") (hasPrefix . "https://") -}}
+      <a href="{{ . }}" rel="noopener"><code>{{ . }}</code></a>
+    {{- else -}}
+      <code>{{ . }}</code>
+    {{- end -}}
+  </dd></div>
+  {{- end }}
+  {{- with .GetTerms "tags" }}
+  <div><dt>Tags</dt><dd class="okf-tags">
+    {{- range . }}<a class="badge badge-tag" href="{{ .RelPermalink }}">{{ .Title }}</a> {{ end -}}
+  </dd></div>
+  {{- end }}
+  {{- with $p.stale_after }}
+  <div><dt>Stale after</dt><dd><time datetime="{{ . }}">{{ . }}</time></dd></div>
+  {{- end }}
+  {{- with $p.generated }}
+  <div><dt>Generated</dt><dd>{{ .by }}{{ with .at }} &middot; <time datetime="{{ . }}">{{ . }}</time>{{ end }}</dd></div>
+  {{- end }}
+  {{- with $p.verified }}
+  <div><dt>Verified</dt><dd>
+    <ul class="plain">
+    {{- range (cond (reflect.IsSlice .) . (slice .)) }}
+      <li>{{ .by }}{{ with .at }} &middot; <time datetime="{{ . }}">{{ . }}</time>{{ end }}</li>
+    {{- end }}
+    </ul>
+  </dd></div>
+  {{- end }}
+  {{- with $p.sources }}
+  <div><dt>Sources</dt><dd>
+    <ul class="plain">
+    {{- range . }}
+      <li>
+        {{- $label := or .title .resource -}}
+        {{- if and .resource (or (hasPrefix .resource "http://") (hasPrefix .resource "https://")) -}}
+          <a href="{{ .resource }}" rel="noopener">{{ $label }}</a>
+        {{- else -}}
+          {{ $label }}
+        {{- end -}}
+        {{- with .author }} — {{ . }}{{ end -}}
+      </li>
+    {{- end }}
+    </ul>
+  </dd></div>
+  {{- end }}
+  {{- with $p.usage_window }}
+  <div><dt>Usage window</dt><dd><time datetime="{{ .from }}">{{ .from }}</time> → <time datetime="{{ .to }}">{{ .to }}</time></dd></div>
+  {{- end }}
+</dl>

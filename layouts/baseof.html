@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="{{ or site.Language.Locale "en" }}" data-okf>
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body>
+  <a class="skip" href="#main">Skip to content</a>
+  <div class="layout">
+    <aside class="sidebar">
+      {{ partial "nav.html" . }}
+    </aside>
+    <main id="main" class="content">
+      {{ block "main" . }}{{ end }}
+    </main>
+  </div>
+  <footer class="site-footer">
+    <span>{{ site.Title }}</span>
+    <span>Rendered from an <a href="https://github.com/GoogleCloudPlatform/knowledge-catalog/blob/main/okf/SPEC.md">OKF</a> bundle &middot; {{ now.Format "2006-01-02 15:04 MST" }}</span>
+  </footer>
+</body>
+</html>

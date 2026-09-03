@@ -1,0 +1,19 @@
+{{- $node := .node -}}
+{{- $current := .current -}}
+{{- $kids := slice -}}
+{{- range $node.Sections }}{{ $kids = $kids | append . }}{{ end -}}
+{{- range $node.RegularPages }}{{ $kids = $kids | append . }}{{ end -}}
+{{- with $kids }}
+<ul class="nav-list">
+  {{- range . }}
+    {{- $isSection := eq .Kind "section" }}
+    <li class="nav-item{{ if $isSection }} is-section{{ end }}">
+      <a href="{{ .RelPermalink }}"{{ if eq . $current }} aria-current="page" class="is-active"{{ end }}>
+        {{- .LinkTitle -}}
+        {{- with .Params.type }} <span class="nav-type">{{ . }}</span>{{ end -}}
+      </a>
+      {{- if $isSection }}{{ partial "nav-branch.html" (dict "node" . "current" $current) }}{{ end }}
+    </li>
+  {{- end }}
+</ul>
+{{- end }}

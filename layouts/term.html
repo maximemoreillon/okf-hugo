@@ -1,0 +1,17 @@
+{{ define "main" }}
+<article class="concept">
+  <header class="concept-head">
+    <h1>Tag: {{ .Title }}</h1>
+    <p class="muted">{{ len .Pages }} concept{{ if ne (len .Pages) 1 }}s{{ end }}</p>
+  </header>
+  <ul class="concept-list">
+    {{ range .Pages }}
+    <li>
+      <a href="{{ .RelPermalink }}">{{ .LinkTitle }}</a>
+      {{ with .Params.type }}<span class="badge badge-type">{{ . }}</span>{{ end }}
+      {{ with .Description }}<span class="muted">{{ . }}</span>{{ end }}
+    </li>
+    {{ end }}
+  </ul>
+</article>
+{{ end }}

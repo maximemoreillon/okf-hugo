@@ -1,4 +1,38 @@
-baseURL = 'https://example.org/'
-locale = 'en-us'
-title = 'My New Hugo Project'
-theme = 'ananke'
+# Generic OKF (Open Knowledge Format) renderer.
+# No content ships in the image; a bundle is mounted/cloned into `content/`
+# at runtime and `baseURL` is supplied per-deployment (env HUGO_BASEURL or
+# the entrypoint's --baseURL flag).
+baseURL = "http://localhost:8080/"
+title = "OKF bundle"
+locale = "en-us"
+
+# The bundle is not part of this repo's git history.
+enableGitInfo = false
+
+# Broken OKF cross-links (`[x](/foo.md)` with no target) should warn, not
+# fail the build -- a bundle we don't control may ship dead links.
+refLinksErrorLevel = "warning"
+refLinksNotFoundURL = "/404.html"
+
+# OKF bundles are plain markdown; no feeds/taxonomy term pages we don't use.
+disableKinds = ["rss", "sitemap"]
+
+[pagination]
+  pagerSize = 100
+
+[taxonomies]
+  tag = "tags"
+
+[markup]
+  [markup.goldmark.renderer]
+    # OKF content is trusted (curated bundle); allow raw HTML tables etc.
+    unsafe = true
+  [markup.goldmark.parser]
+    wrapStandAloneImageWithinParagraph = false
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 4
+
+[build]
+  [build.buildStats]
+    enable = false

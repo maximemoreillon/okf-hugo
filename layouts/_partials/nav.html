@@ -1,0 +1,5 @@
+{{- /* Bundle tree: home, then each section and its concepts, recursively. */ -}}
+<nav class="nav" aria-label="Bundle">
+  <a class="nav-home{{ if .IsHome }} is-active{{ end }}" href="{{ "/" | relURL }}">{{ site.Title }}</a>
+  {{ partial "nav-branch.html" (dict "node" site.Home "current" .) }}
+</nav>
