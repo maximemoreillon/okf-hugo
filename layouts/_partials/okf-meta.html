@@ -1,5 +1,9 @@
-{{- /* Renders OKF frontmatter for a concept page as a metadata panel. */ -}}
+{{- /* Renders OKF frontmatter for a concept page as a metadata panel.
+       Emits nothing when the page carries none of these fields (e.g. an
+       auto-created section page for a bundle folder with no index.md). */ -}}
 {{- $p := .Params -}}
+{{- $has := or $p.type $p.status $p.resource (.GetTerms "tags") $p.stale_after $p.generated $p.verified $p.sources $p.usage_window -}}
+{{- if $has -}}
 <dl class="okf-meta">
   {{- with $p.type }}
   <div><dt>Type</dt><dd><span class="badge badge-type">{{ . }}</span></dd></div>
@@ -57,3 +61,4 @@
   <div><dt>Usage window</dt><dd><time datetime="{{ .from }}">{{ .from }}</time> → <time datetime="{{ .to }}">{{ .to }}</time></dd></div>
   {{- end }}
 </dl>
+{{- end -}}

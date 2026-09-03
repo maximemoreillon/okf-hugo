@@ -58,7 +58,7 @@ pre code { background: none; padding: 0; }
 .concept-head h1 { margin: 0 0 .25rem; font-size: 1.8rem; line-height: 1.2; }
 .lead { font-size: 1.1rem; color: var(--muted); margin: .25rem 0 1.25rem; }
 
-.okf-meta { display: grid; grid-template-columns: max-content 1fr; gap: .35rem 1rem; margin: 0 0 1.75rem; padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
+.okf-meta { display: grid; grid-template-columns: max-content 1fr; gap: .35rem 1rem; margin: 1rem 0 1.75rem; padding: 1rem; background: var(--surface); border: 1px solid var(--border); border-radius: 10px; }
 .okf-meta > div { display: contents; }
 .okf-meta dt { color: var(--muted); font-size: .82rem; text-transform: uppercase; letter-spacing: .03em; padding-top: .1rem; }
 .okf-meta dd { margin: 0; }
