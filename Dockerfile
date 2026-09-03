@@ -27,7 +27,11 @@ COPY hugo.toml ./
 COPY assets/ ./assets/
 COPY layouts/ ./layouts/
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Pre-create the writable dirs the entrypoint uses, owned by the runtime user.
+# (When these are emptyDir mounts in K8s they're world-writable anyway.)
+RUN chmod +x /usr/local/bin/entrypoint.sh \
+ && mkdir -p /work /bundle \
+ && chown -R 65532:65532 /work /bundle
 
 ENV TEMPLATE_DIR=/app \
     SRC_DIR=/work \
