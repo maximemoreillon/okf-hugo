@@ -14,7 +14,7 @@ concurrency:
 env:
   # Docker Hub repo to publish to: <user>/okf-hugo.
   # Set repo variable DOCKERHUB_USERNAME, or hard-code the image below.
-  IMAGE: docker.io/${{ vars.DOCKERHUB_USERNAME }}/okf-hugo
+  IMAGE: docker.io/${{ secrets.DOCKERHUB_USERNAME }}/okf-hugo
 
 jobs:
   build-push:
